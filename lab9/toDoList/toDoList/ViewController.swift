@@ -9,9 +9,21 @@ import UIKit
 import CoreData
 
 class ViewController: UIViewController {
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     @IBOutlet weak var taskTextField: UITextField!
     @IBAction func addTask(_ sender: Any) {
+        guard let text = taskTextField.text, !text.isEmpty else {return}
+        let newTask = Task(context: context)
+        newTask.name = text
+        newTask.id = UUID()
+        
+        do{
+            try context.save()
+            taskTextField.text = ""
+        }catch{
+            print("Error saving task: \(error)")
+        }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
