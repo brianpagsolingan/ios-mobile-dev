@@ -31,6 +31,25 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         }
     }
     
+    func saveContext() {
+        do{
+            try context.save()
+            tableView.reloadData()
+        }catch{
+            print("Error saving")
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
+        return tasks.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell{
+        let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath)
+        cell.textLabel?.text = tasks[indexPath.row].name
+        return cell
+    }
+    
 
     /*
     // MARK: - Navigation
