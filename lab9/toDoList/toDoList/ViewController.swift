@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var taskTextField: UITextField!
     @IBAction func addTask(_ sender: Any) {
         guard let text = taskTextField.text, !text.isEmpty else {return}
-        let newTask = Task(context: context)
+        let newTask = ToDoTask(context: context)
         newTask.name = text
         newTask.id = UUID()
         
