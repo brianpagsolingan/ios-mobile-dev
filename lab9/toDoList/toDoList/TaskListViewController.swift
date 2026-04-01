@@ -50,6 +50,45 @@ class TaskListViewController: UIViewController, UITableViewDataSource, UITableVi
         return cell
     }
     
+    // de;ete
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete{
+            let taskToDelete = tasks[indexPath.row]
+            context.delete(taskToDelete)
+            tasks.remove(at: indexPath.row)
+            saveContext()
+            
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    // swipe to edit
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
+        let taskToEdit = tasks[indexPath.row]
+        
+        let alert = UIAlertController(title: "Edit Task", message: "Update your task", preferredStyle: .alert)
+        alert.addTextField { (alertTextField) in
+            alertTextField.text = taskToEdit.name
+        }
+        
+        let saveAction = UIAlertAction(title: "Save", style: .default){ _ in
+            if let updatedText = alert.textFields?.first?.text, !updatedText.isEmpty{
+                taskToEdit.name = updatedText
+                self.saveContext()
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
+        alert.addAction(saveAction)
+        alert.addAction(cancelAction)
+        present(alert, animated: true)
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        
+    }
+    
 
     /*
     // MARK: - Navigation
